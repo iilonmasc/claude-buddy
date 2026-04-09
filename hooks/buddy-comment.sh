@@ -7,7 +7,6 @@
 
 STATE_DIR="$HOME/.claude-buddy"
 STATUS_FILE="$STATE_DIR/status.json"
-COOLDOWN_FILE="$STATE_DIR/.last_comment"
 
 [ -f "$STATUS_FILE" ] || exit 0
 
@@ -17,19 +16,11 @@ INPUT=$(cat)
 MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // ""' 2>/dev/null)
 [ -z "$MSG" ] && exit 0
 
-# Extract <!-- buddy: ... --> comment
-COMMENT=$(echo "$MSG" | grep -oP '<!--\s*buddy:\s*\K.+?(?=\s*-->)' | tail -1)
+# Extract <!-- buddy: ... --> comment (perl: PCRE lookahead not available in macOS BSD grep)
+COMMENT=$(echo "$MSG" | perl -ne 'print $1 if /<!--\s*buddy:\s*(.+?)\s*-->/' | tail -1)
 [ -z "$COMMENT" ] && exit 0
 
-# Cooldown: 20 seconds
-if [ -f "$COOLDOWN_FILE" ]; then
-    LAST=$(cat "$COOLDOWN_FILE" 2>/dev/null)
-    NOW=$(date +%s)
-    [ $(( NOW - ${LAST:-0} )) -lt 20 ] && exit 0
-fi
-
 mkdir -p "$STATE_DIR"
-date +%s > "$COOLDOWN_FILE"
 
 # Update status.json with the reaction
 TMP=$(mktemp)

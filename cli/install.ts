@@ -155,12 +155,13 @@ function installStatusLine(settings: Record<string, any>) {
 // ─── Step 4: Register hooks ─────────────────────────────────────────────────
 
 function installHooks(settings: Record<string, any>) {
-  const reactHook = join(PROJECT_ROOT, "hooks", "react.sh");
-  const commentHook = join(PROJECT_ROOT, "hooks", "buddy-comment.sh");
+  const reactHook    = join(PROJECT_ROOT, "hooks", "react.sh");
+  const commentHook  = join(PROJECT_ROOT, "hooks", "buddy-comment.sh");
+  const nameHook     = join(PROJECT_ROOT, "hooks", "name-react.sh");
 
   if (!settings.hooks) settings.hooks = {};
 
-  // PostToolUse: detect errors/test failures in Bash output
+  // PostToolUse: detect errors/test failures/successes in Bash output
   if (!settings.hooks.PostToolUse) settings.hooks.PostToolUse = [];
   settings.hooks.PostToolUse = settings.hooks.PostToolUse.filter(
     (h: any) => !h.hooks?.some((hh: any) => hh.command?.includes("claude-buddy")),
@@ -170,7 +171,7 @@ function installHooks(settings: Record<string, any>) {
     hooks: [{ type: "command", command: reactHook }],
   });
 
-  // Stop: extract buddy comment from Claude's response
+  // Stop: extract <!-- buddy: --> comment from Claude's response
   if (!settings.hooks.Stop) settings.hooks.Stop = [];
   settings.hooks.Stop = settings.hooks.Stop.filter(
     (h: any) => !h.hooks?.some((hh: any) => hh.command?.includes("claude-buddy")),
@@ -179,7 +180,16 @@ function installHooks(settings: Record<string, any>) {
     hooks: [{ type: "command", command: commentHook }],
   });
 
-  ok("Hooks registered: PostToolUse + Stop");
+  // UserPromptSubmit: detect buddy's name in user message → instant status line reaction
+  if (!settings.hooks.UserPromptSubmit) settings.hooks.UserPromptSubmit = [];
+  settings.hooks.UserPromptSubmit = settings.hooks.UserPromptSubmit.filter(
+    (h: any) => !h.hooks?.some((hh: any) => hh.command?.includes("claude-buddy")),
+  );
+  settings.hooks.UserPromptSubmit.push({
+    hooks: [{ type: "command", command: nameHook }],
+  });
+
+  ok("Hooks registered: PostToolUse + Stop + UserPromptSubmit");
 }
 
 // ─── Step 5: Ensure MCP tools are allowed ───────────────────────────────────
