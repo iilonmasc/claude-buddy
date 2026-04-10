@@ -22,8 +22,10 @@ if [ -f "$COOLDOWN_FILE" ]; then
     [ "$DIFF" -lt 15 ] && exit 0
 fi
 
-# Extract tool result
-RESULT=$(echo "$INPUT" | jq -r '.tool_result // ""' 2>/dev/null)
+# Extract tool response (PostToolUse schema field is .tool_response — not
+# .tool_result, which is the Anthropic SDK's content-block type name and is
+# never a key on the hook input payload).
+RESULT=$(echo "$INPUT" | jq -r '.tool_response // ""' 2>/dev/null)
 [ -z "$RESULT" ] && exit 0
 
 # Read species for species-aware reactions
