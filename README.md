@@ -384,9 +384,9 @@ This MVP covers the core: your buddy is back, animated, talking, and permanent. 
 - [ ] **Mood system** — buddy's mood shifts based on code quality, test results, time of day
 - [ ] **Buddy journal** — daily summary of what your buddy observed, stored in `~/.claude-buddy/journal/`
 - [ ] **Achievement badges** — milestones like "1000 lines reviewed", "first test-fail caught", "week streak"
-- [ ] **Multi-buddy support** — hatch and switch between multiple companions
+- [x] **Multi-buddy support** — menagerie system with named slots, interactive TUI picker, summon/save/list/dismiss
 - [ ] **Light theme colors** — auto-detect and match light theme RGB values
-- [x] **tmux popup mode** -- floating overlay in bottom-right corner via `tmux display-popup`
+- [x] **tmux popup mode** — floating overlay in bottom-right corner via `tmux display-popup`
 - [ ] **New species + community art** — submit your own species designs
 - [ ] **`npx claude-buddy`** — one-command install without cloning
 
@@ -395,6 +395,14 @@ If you have ideas, open an issue or PR. This project exists because the communit
 ## Contributing
 
 PRs welcome. Whether it's a new species, a better reaction, a bugfix, or a wild new feature — bring it.
+
+## Contributors
+
+Thank you to everyone who helped bring buddies back to life:
+
+- **[@doctor-ew](https://github.com/doctor-ew)** — multi-buddy menagerie system: named slots, interactive TUI picker, species-aware reactions, name detection hook
+- **[@gzenz](https://github.com/gzenz)** — tmux popup overlay mode, session isolation, configurable appearance, ESC passthrough
+- **[@birkdev](https://github.com/birkdev)** — PostToolUse hook field fix (tool_response)
 
 ## Credits
 

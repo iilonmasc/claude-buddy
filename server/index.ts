@@ -51,7 +51,7 @@ function getInstructions(): string {
 
 const server = new McpServer({
   name: "claude-buddy",
-  version: "0.2.0",
+  version: "0.3.0",
 }, {
   instructions: getInstructions(),
 });
