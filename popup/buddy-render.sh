@@ -37,7 +37,7 @@ if [ -f "$CONFIG_FILE" ]; then
   case "$_bp" in top|left) BUBBLE_POSITION="$_bp" ;; esac
   _sr=$(jq -r 'if .showRarity == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
   [ "$_sr" = "false" ] && SHOW_RARITY=0
-  _ttl=$(jq -r '.reactionTTL // 0' "$CONFIG_FILE" 2>/dev/null || echo 20)
+  _ttl=$(jq -r '.reactionTTL // 0' "$CONFIG_FILE" 2>/dev/null || echo 0)
   case "$_ttl" in ''|*[!0-9]*) ;; *) REACTION_TTL="$_ttl" ;; esac
 fi
 
